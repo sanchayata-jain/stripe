@@ -1,2 +1,2 @@
 # stripe
-creating clients and testing them
+creating API client with stripe
