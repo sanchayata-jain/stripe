@@ -43,3 +43,32 @@ func TestClientCustomer(t *testing.T) {
 		t.Errorf("Customer() ID = %s; want prefix %q", cus.Email, email)
 	}
 }
+
+func TestClientCharge(t *testing.T) {
+	if apiKey == "" {
+		t.Skip("No API key provided")
+	}
+
+	c := client.Client{
+		Key: apiKey,
+	}
+	// Create a customer for the test
+	tok := "tok_amex"
+	email := "test@testwithgo.com"
+	cus, err := c.Customer(tok, email)
+	if err != nil {
+		t.Fatalf("Customer() err = %s; want %v", err, nil)
+	}
+	amount := 1234
+	charge, err := c.Charge(cus.ID, amount)
+	if err != nil {
+		t.Errorf("Charge() err = %s; want %v", err, nil)
+	}
+	if charge == nil {
+		t.Fatal("Charge() = nil; want non-nil value")
+	}
+
+	if charge.Amount != amount {
+		t.Errorf("Charge() Amount = %d; want %d", charge.Amount, amount)
+	}
+}
